@@ -53,7 +53,7 @@ network = fully_connected(network, 4096, activation='tanh')
 network = dropout(network, 0.5)
 network = fully_connected(network, 4096, activation='tanh')
 network = dropout(network, 0.5)
-network = fully_connected(network, 6, activation='softmax')
+network = fully_connected(network, 5, activation='softmax')
 network = regression(network, optimizer='momentum',loss='categorical_crossentropy',learning_rate=0.001)
 
 #read all folders
