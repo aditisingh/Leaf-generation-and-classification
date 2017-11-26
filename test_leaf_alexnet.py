@@ -114,4 +114,4 @@ for img in border_list:
         border_label.append('4')
 
 print('Border accuracy score:')
-print(accuracy_score(border_label,border_pred)) #
+print(accuracy_score(border_label,border_pred)) #21.37%
