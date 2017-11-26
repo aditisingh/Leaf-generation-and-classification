@@ -67,12 +67,12 @@ images=[]
 
 target_id=0
 
-for folder_name in all_folders:
+for folder_name in all_folders: #order:['Elm', 'Magnolia', 'Maple', 'Oak', 'Pine']
     all_images=os.listdir('Image_prepared/'+folder_name)
     for img in all_images:
         infile='Image_prepared/'+folder_name+'/'+img
-        im=Image.open(infile)
-        im=imresize(im,(227,227,3))
+		im=Image.open(infile)
+		im=imresize(im,(227,227,3))
         pix=np.array(im)
         images.append(pix)
         targets.append(str(target_id))
@@ -107,54 +107,20 @@ train_X=[images[x] for x in train_indices]
 validate_X=[images[x] for x in validate_indices]
 test_X=[images[x] for x in test_indices]
 
+#t1=to_categorical(train_t,5)
+#f1=np.array(train_X)
+
+#t2=to_categorical(validate_t,5)
+#f2=np.array(validate_X)
+
 t1=to_categorical(targets,5)
 f1=np.array(images)
 
 model = tflearn.DNN(network)
 model.fit(f1,t1, n_epoch=150, validation_set=0.2, shuffle=True,show_metric=True, batch_size=300, snapshot_step=200, snapshot_epoch=False, run_id='training')
+
+#model.fit(f1,t1, n_epoch=150, validation_set=(f2,t2), shuffle=True,show_metric=True, batch_size=300, snapshot_step=200, snapshot_epoch=False, run_id='training')
 #go to each of the indices in these clusters
 
-model.save('model_alex.tflearn')
-model.load('model_alex.tflearn')
-
-#model.save('model_full_1200.tflearn')
-v=np.array(validate_X)
-#model performance on validation set
-validate_pred1=[]
-for i in range(len(v)):
-    validate_pred1.append(model.predict(v[i].reshape(1,227,227,3)))
-
-validate_pred=[]
-for pred in validate_pred1:
-    y1=pred[0]
-    max_val=0
-    idx=0
-    for i in range(len(y1)):
-        if(y1[i]>max_val):
-            max_val=y1[i]
-            idx=i
-    validate_pred.append(str(idx))
-
-print('validation accuracy:')
-accuracy_score(validate_t,validate_pred)
-
-
-v=np.array(test_X)
-#model performance on validation set
-validate_pred1=[]
-for i in range(len(v)):
-    validate_pred1.append(model.predict(v[i].reshape(1,227,227,3)))
-
-validate_pred=[]
-for pred in validate_pred1:
-    y1=pred[0]
-    max_val=0
-    idx=0
-    for i in range(len(y1)):
-        if(y1[i]>max_val):
-            max_val=y1[i]
-            idx=i
-    validate_pred.append(str(idx))
-
-print('Test accuracy:')
-accuracy_score(test_t,validate_pred)
+model.save('model_alex_full.tflearn')
+model.load('model_alex_full.tflearn')
